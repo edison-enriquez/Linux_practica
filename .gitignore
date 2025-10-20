@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Flask
+instance/
+.webassets-cache
+
+# Linux Lab
+linux_lab/
+.progress.json
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ========================================
+# ARCHIVOS CONFIDENCIALES DEL INSTRUCTOR
+# ========================================
+# Estos archivos NO deben estar en el repo de estudiantes
+
+# Soluciones completas
+SOLUCIONES.md
+
+# Guías del profesor
+GUIA_PROFESOR.md
+
+# Documentos de completación y expansión (internos)
+COMPLETADO.md
+EXPANSION_COMPLETADA.md
+
+# Material de referencia del curso
+*.pdf
+*.pptx
+Linux_Command_Line_*.pdf
