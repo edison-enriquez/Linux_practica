@@ -8,7 +8,9 @@
 
 Aprende comandos de Linux de forma práctica e interactiva, resolviendo retos progresivos y ganando puntos. Perfecto para estudiantes, desarrolladores y entusiastas de la línea de comandos.
 
----
+
+
+
 
 ## 📋 Tabla de Contenidos
 
