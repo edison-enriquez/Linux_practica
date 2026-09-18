@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,6 +47,7 @@
             from {
                 text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41;
             }
+
             to {
                 text-shadow: 0 0 20px #00ff41, 0 0 30px #00ff41, 0 0 40px #00ff41;
             }
@@ -226,7 +228,7 @@
         }
 
         .challenge-card.completed::before {
-            content: "✓";
+            content: "Completado";
             position: absolute;
             top: 10px;
             right: 10px;
@@ -328,6 +330,7 @@
                 transform: translateX(400px);
                 opacity: 0;
             }
+
             to {
                 transform: translateX(0);
                 opacity: 1;
@@ -442,32 +445,406 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
-        .difficulty-Principiante { color: #00ff41; }
-        .difficulty-Intermedio { color: #ffc107; }
-        .difficulty-Avanzado { color: #ff9800; }
-        .difficulty-Experto { color: #ff4444; }
+        .difficulty-Principiante {
+            color: #00ff41;
+        }
+
+        .difficulty-Intermedio {
+            color: #ffc107;
+        }
+
+        .difficulty-Avanzado {
+            color: #ff9800;
+        }
+
+        .difficulty-Experto {
+            color: #ff4444;
+        }
+    </style>
+    <style>
+        :root {
+            --ink: #17212b;
+            --muted: #65727d;
+            --paper: #f6f8f7;
+            --surface: #ffffff;
+            --line: #dbe3e3;
+            --teal: #0d6b68;
+            --teal-soft: #e1f1ef;
+            --coral: #c85c47;
+            --shadow: 0 16px 40px rgba(23, 33, 43, 0.08);
+        }
+
+        body {
+            font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            padding: 32px 20px;
+        }
+
+        .container {
+            max-width: 1180px;
+        }
+
+        header {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 24px;
+            text-align: left;
+            margin-bottom: 24px;
+            padding: 32px 36px;
+            background: var(--ink);
+            border: 0;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            margin-bottom: 8px;
+            color: #f5fbfa;
+            font-family: Georgia, serif;
+            font-size: clamp(2rem, 5vw, 3.4rem);
+            letter-spacing: 0;
+            text-shadow: none;
+            animation: none;
+        }
+
+        .subtitle {
+            color: #afc0c2;
+            font-size: 0.98rem;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .stat-card,
+        .progress-container,
+        .submit-section {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-card {
+            padding: 20px;
+            text-align: left;
+            cursor: default;
+        }
+
+        .stat-card:hover {
+            transform: none;
+            box-shadow: var(--shadow);
+            background: var(--surface);
+        }
+
+        .stat-value {
+            color: var(--teal);
+            font-size: 2rem;
+            margin: 6px 0 0;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 0.74rem;
+            letter-spacing: 0.08em;
+        }
+
+        .progress-section {
+            margin-bottom: 28px;
+        }
+
+        .progress-container {
+            padding: 22px 24px;
+        }
+
+        .progress-container h2,
+        .submit-section h2,
+        .challenges-section h2 {
+            color: var(--ink);
+        }
+
+        .progress-bar-container {
+            height: 10px;
+            margin: 16px 0 8px;
+            background: #edf1f1;
+            border: 0;
+            border-radius: 99px;
+        }
+
+        .progress-bar {
+            background: var(--teal);
+            border-radius: 99px;
+            color: transparent;
+            font-size: 0;
+        }
+
+        .submit-section {
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+
+        .submit-section h2 {
+            margin-bottom: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        input[type="text"] {
+            padding: 13px 15px;
+            background: #fbfcfc;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            color: var(--ink);
+            font-family: monospace;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px var(--teal-soft);
+            background: var(--surface);
+        }
+
+        button {
+            padding: 13px 22px;
+            background: var(--teal);
+            border-radius: 8px;
+            color: #fff;
+            font-family: inherit;
+        }
+
+        button:hover {
+            background: #095552;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .challenges-section h2 {
+            margin-bottom: 16px;
+            font-size: 1.55rem;
+        }
+
+        .challenges-grid {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 12px;
+        }
+
+        .challenge-card {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 6px 20px rgba(23, 33, 43, 0.04);
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            border-color: #b7cecc;
+        }
+
+        .challenge-card.completed {
+            border-color: #75aaa5;
+            background: #f4fbfa;
+        }
+
+        .challenge-card.completed::before {
+            content: "Completado";
+            top: 18px;
+            right: 18px;
+            font-size: 0.68rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .challenge-header {
+            align-items: start;
+            gap: 12px;
+        }
+
+        .challenge-title {
+            color: var(--ink);
+            font-size: 1.08rem;
+            line-height: 1.35;
+        }
+
+        .challenge-points {
+            flex: 0 0 auto;
+            background: var(--teal-soft);
+            color: var(--teal);
+            padding: 5px 9px;
+            border-radius: 6px;
+            font-size: 0.76rem;
+        }
+
+        .challenge-description {
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        .challenge-meta {
+            gap: 7px;
+            margin-bottom: 18px;
+        }
+
+        .meta-badge {
+            background: transparent;
+            color: var(--muted);
+            padding: 4px 8px;
+            border: 1px solid var(--line);
+            border-radius: 5px;
+            font-size: 0.72rem;
+        }
+
+        .difficulty-Principiante {
+            color: var(--teal);
+        }
+
+        .difficulty-Intermedio {
+            color: #98711f;
+        }
+
+        .difficulty-Avanzado {
+            color: #b34f3f;
+        }
+
+        .difficulty-Experto {
+            color: #86446d;
+        }
+
+        .btn-hint {
+            padding: 9px 12px;
+            background: transparent;
+            border: 1px solid #b6c9c8;
+            color: var(--teal);
+            border-radius: 7px;
+            font-size: 0.82rem;
+        }
+
+        .btn-hint:hover {
+            background: var(--teal-soft);
+            color: var(--teal);
+            transform: none;
+        }
+
+        .challenge-date {
+            color: var(--teal);
+            font-size: 0.75rem;
+        }
+
+        .notification {
+            top: 24px;
+            right: 24px;
+            padding: 15px 18px;
+            border-radius: 9px;
+            box-shadow: var(--shadow);
+        }
+
+        .notification.success {
+            background: var(--teal);
+            border: 0;
+            color: #fff;
+        }
+
+        .notification.error {
+            background: var(--coral);
+            border: 0;
+        }
+
+        .notification.warning {
+            background: #d9a83e;
+            border: 0;
+            color: var(--ink);
+        }
+
+        .modal {
+            background: rgba(23, 33, 43, 0.58);
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border: 0;
+            border-radius: 14px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .modal-header {
+            color: var(--ink);
+            font-size: 1.4rem;
+        }
+
+        .modal-body {
+            color: var(--muted);
+        }
+
+        .modal-close {
+            background: var(--ink);
+            padding: 10px 18px;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding: 22px;
+            color: var(--muted);
+            border-top: 1px solid var(--line);
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 16px 12px;
+            }
+
+            header {
+                display: block;
+                padding: 26px 22px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group {
+                flex-direction: column;
+            }
+
+            .challenges-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Header -->
         <header>
-            <h1>🎯 LINUX CHALLENGE LAB</h1>
-            <p class="subtitle">Sistema de Retos CTF - Aprende Linux de forma interactiva</p>
+            <div>
+                <h1>LINUX CHALLENGE LAB</h1>
+                <p class="subtitle">Práctica guiada de administración y línea de comandos</p>
+            </div>
         </header>
 
         <!-- Stats Dashboard -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-label">Retos Completados</div>
-                <div class="stat-value" id="completados">0/10</div>
+                <div class="stat-value" id="completados">0/20</div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Puntos Totales</div>
-                <div class="stat-value" id="puntos">0/175</div>
+                <div class="stat-value" id="puntos">0/400</div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Progreso</div>
@@ -478,7 +855,7 @@
         <!-- Progress Bar -->
         <div class="progress-section">
             <div class="progress-container">
-                <h2>📈 Progreso General</h2>
+                <h2>Progreso general</h2>
                 <div class="progress-bar-container">
                     <div class="progress-bar" id="progressBar" style="width: 0%">0%</div>
                 </div>
@@ -487,25 +864,19 @@
 
         <!-- Submit Form -->
         <div class="submit-section">
-            <h2>🚀 Enviar Flag</h2>
+            <h2>Enviar flag</h2>
             <form id="submitForm" class="form-group">
-                <input 
-                    type="text" 
-                    id="flagInput" 
-                    placeholder="FLAG{...}" 
-                    autocomplete="off"
-                    required
-                >
+                <input type="text" id="flagInput" placeholder="FLAG{...}" autocomplete="off" required>
                 <button type="submit">Enviar</button>
             </form>
             <p class="subtitle" style="margin-top: 10px;">
-                💡 Formato: FLAG{descripcion_del_reto}
+                Formato: FLAG{descripcion_del_reto}
             </p>
         </div>
 
         <!-- Challenges Section -->
         <div class="challenges-section">
-            <h2>🎮 Retos Disponibles</h2>
+            <h2>Retos disponibles</h2>
             <div class="challenges-grid" id="challengesGrid">
                 <!-- Los retos se cargarán dinámicamente aquí -->
             </div>
@@ -513,15 +884,15 @@
 
         <!-- Footer -->
         <footer>
-            <p>🔧 Desarrollado para aprendizaje de Linux | GitHub Codespaces</p>
-            <p style="margin-top: 10px;">⌨️ Usa la terminal para explorar y resolver los retos</p>
+            <p>Laboratorio de aprendizaje de Linux | GitHub Codespaces</p>
+            <p style="margin-top: 10px;">Usa la terminal para explorar y resolver los retos</p>
         </footer>
     </div>
 
     <!-- Modal para pistas -->
     <div class="modal" id="hintModal">
         <div class="modal-content">
-            <h3 class="modal-header" id="modalTitle">💡 Pista</h3>
+            <h3 class="modal-header" id="modalTitle">Pista</h3>
             <div class="modal-body" id="modalBody"></div>
             <button class="modal-close" onclick="closeModal()">Cerrar</button>
         </div>
@@ -532,7 +903,7 @@
         let progressData = null;
 
         // Cargar progreso al iniciar
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             loadProgress();
             // Actualizar cada 10 segundos
             setInterval(loadProgress, 10000);
@@ -543,7 +914,7 @@
             try {
                 const response = await fetch('/api/progress');
                 if (!response.ok) throw new Error('Error al cargar progreso');
-                
+
                 progressData = await response.json();
                 updateUI();
             } catch (error) {
@@ -557,12 +928,12 @@
             if (!progressData) return;
 
             // Actualizar estadísticas
-            document.getElementById('completados').textContent = 
+            document.getElementById('completados').textContent =
                 `${progressData.completados.length}/${progressData.total_retos}`;
-            
-            document.getElementById('puntos').textContent = 
+
+            document.getElementById('puntos').textContent =
                 `${progressData.puntos}/${progressData.puntos_maximos}`;
-            
+
             const porcentaje = Math.round(progressData.porcentaje);
             document.getElementById('porcentaje').textContent = `${porcentaje}%`;
 
@@ -583,13 +954,14 @@
             progressData.retos.forEach(reto => {
                 const card = document.createElement('div');
                 card.className = `challenge-card ${reto.completado ? 'completed' : ''}`;
-                
-                const fechaHtml = reto.fecha ? 
-                    `<div class="challenge-date">✅ Completado: ${formatDate(reto.fecha)}</div>` : '';
+                const nombre = cleanText(reto.nombre);
+
+                const fechaHtml = reto.fecha ?
+                    `<div class="challenge-date">Completado: ${formatDate(reto.fecha)}</div>` : '';
 
                 card.innerHTML = `
                     <div class="challenge-header">
-                        <div class="challenge-title">Reto ${reto.id}: ${reto.nombre}</div>
+                        <div class="challenge-title">Reto ${reto.id}: ${nombre}</div>
                         <div class="challenge-points">+${reto.puntos} pts</div>
                     </div>
                     <div class="challenge-description">${reto.descripcion}</div>
@@ -599,7 +971,7 @@
                     </div>
                     <div class="challenge-actions">
                         <button class="btn-hint" onclick="showHint(${reto.id})">
-                            💡 Ver Pista
+                            Ver pista
                         </button>
                     </div>
                     ${fechaHtml}
@@ -610,9 +982,9 @@
         }
 
         // Enviar flag
-        document.getElementById('submitForm').addEventListener('submit', async function(e) {
+        document.getElementById('submitForm').addEventListener('submit', async function (e) {
             e.preventDefault();
-            
+
             const flagInput = document.getElementById('flagInput');
             const flag = flagInput.value.trim();
 
@@ -635,7 +1007,7 @@
                 if (result.success) {
                     showNotification(result.message, 'success');
                     flagInput.value = '';
-                    
+
                     // Recargar progreso
                     await loadProgress();
 
@@ -661,8 +1033,8 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    document.getElementById('modalTitle').textContent = 
-                        `💡 Pista - ${result.nombre}`;
+                    document.getElementById('modalTitle').textContent =
+                        `Pista - ${cleanText(result.nombre)}`;
                     document.getElementById('modalBody').textContent = result.pista;
                     document.getElementById('hintModal').classList.add('active');
                 } else {
@@ -683,8 +1055,8 @@
         function showNotification(message, type = 'success') {
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
-            notification.textContent = message;
-            
+            notification.textContent = cleanText(message);
+
             document.body.appendChild(notification);
 
             setTimeout(() => {
@@ -695,16 +1067,16 @@
         // Mostrar felicitaciones
         function showCongratulations() {
             const modal = document.getElementById('hintModal');
-            document.getElementById('modalTitle').textContent = '🏆 ¡FELICIDADES! 🏆';
+            document.getElementById('modalTitle').textContent = 'Felicitaciones';
             document.getElementById('modalBody').innerHTML = `
-                <p style="font-size: 1.2em; color: #00ff41; text-align: center;">
+                <p style="font-size: 1.2em; color: #0d6b68; text-align: center;">
                     ¡Has completado todos los retos del Linux Challenge Lab!
                 </p>
-                <p style="text-align: center; margin-top: 20px; color: #6c757d;">
+                <p style="text-align: center; margin-top: 20px; color: #65727d;">
                     Puntuación final: ${progressData.puntos}/${progressData.puntos_maximos} puntos
                 </p>
-                <p style="text-align: center; margin-top: 20px; color: #ffc107; font-size: 1.5em;">
-                    🎉 ¡Eres un maestro de Linux! 🎉
+                <p style="text-align: center; margin-top: 20px; color: #c85c47; font-size: 1.1em;">
+                    Eres un maestro de Linux.
                 </p>
             `;
             modal.classList.add('active');
@@ -722,19 +1094,24 @@
             });
         }
 
+        function cleanText(value) {
+            return value.replace(/[^\x00-\x7F]/g, '').replace(/\s{2,}/g, ' ').trim();
+        }
+
         // Cerrar modal al hacer clic fuera
-        document.getElementById('hintModal').addEventListener('click', function(e) {
+        document.getElementById('hintModal').addEventListener('click', function (e) {
             if (e.target === this) {
                 closeModal();
             }
         });
 
         // Soporte para Enter en el input
-        document.getElementById('flagInput').addEventListener('keypress', function(e) {
+        document.getElementById('flagInput').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 document.getElementById('submitForm').dispatchEvent(new Event('submit'));
             }
         });
     </script>
 </body>
+
 </html>

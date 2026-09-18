@@ -9,11 +9,13 @@ import os
 import sys
 from pathlib import Path
 
+
 def print_header(text):
     """Imprime un encabezado formateado"""
     print("\n" + "=" * 70)
     print(f"  {text}")
     print("=" * 70)
+
 
 def check_python():
     """Verifica la versión de Python"""
@@ -23,8 +25,10 @@ def check_python():
         print(f"   ✅ Python {version.major}.{version.minor}.{version.micro}")
         return True
     else:
-        print(f"   ❌ Se requiere Python 3.8 o superior (tienes {version.major}.{version.minor})")
+        print(
+            f"   ❌ Se requiere Python 3.8 o superior (tienes {version.major}.{version.minor})")
         return False
+
 
 def check_dependencies():
     """Verifica las dependencias instaladas"""
@@ -33,7 +37,7 @@ def check_dependencies():
         'flask': 'Flask',
         'werkzeug': 'Werkzeug'
     }
-    
+
     all_installed = True
     for module, name in dependencies.items():
         try:
@@ -42,8 +46,9 @@ def check_dependencies():
         except ImportError:
             print(f"   ❌ {name} no está instalado")
             all_installed = False
-    
+
     return all_installed
+
 
 def check_files():
     """Verifica que existan los archivos necesarios"""
@@ -55,7 +60,7 @@ def check_files():
         'requirements.txt': 'Dependencias',
         'start.sh': 'Script de inicio'
     }
-    
+
     all_exist = True
     for file, description in required_files.items():
         path = Path(file)
@@ -65,25 +70,26 @@ def check_files():
         else:
             print(f"   ❌ {file} - {description}")
             all_exist = False
-    
+
     return all_exist
+
 
 def check_environment():
     """Verifica el entorno del laboratorio"""
     print("\n🔧 Verificando entorno del laboratorio...")
     lab_dir = Path.home() / "linux_lab"
-    
+
     if not lab_dir.exists():
         print(f"   ❌ Directorio del laboratorio no existe: {lab_dir}")
         print(f"   💡 Ejecuta: python3 linux_challenge.py setup")
         return False
-    
+
     print(f"   ✅ Directorio del laboratorio: {lab_dir}")
-    
+
     # Verificar subdirectorios
     subdirs = ['secretos', 'logs', 'datos', 'config', 'archivos', 'sistema']
     missing = []
-    
+
     for subdir in subdirs:
         path = lab_dir / subdir
         if path.exists():
@@ -91,7 +97,7 @@ def check_environment():
         else:
             print(f"   ⚠️  {subdir}/ (falta)")
             missing.append(subdir)
-    
+
     # Verificar archivo de progreso
     progress_file = lab_dir / ".progress.json"
     if progress_file.exists():
@@ -101,26 +107,28 @@ def check_environment():
                 progress = json.load(f)
             completados = len(progress.get('completados', []))
             puntos = progress.get('puntos', 0)
+            total_retos = 20
             print(f"\n   📊 Progreso actual:")
-            print(f"      • Retos completados: {completados}/10")
-            print(f"      • Puntos: {puntos}/175")
+            print(f"      • Retos completados: {completados}/{total_retos}")
+            print(f"      • Puntos registrados: {puntos}")
         except:
             print(f"   ⚠️  Archivo de progreso corrupto")
     else:
         print(f"\n   ℹ️  No hay progreso guardado aún")
-    
+
     if missing:
         print(f"\n   ⚠️  Algunos directorios faltan. Considera reconfigurar:")
         print(f"   💡 Ejecuta: python3 linux_challenge.py setup")
         return False
-    
+
     return True
+
 
 def check_permissions():
     """Verifica permisos de archivos ejecutables"""
     print("\n🔐 Verificando permisos...")
     executable_files = ['start.sh', 'verify_system.py']
-    
+
     all_ok = True
     for file in executable_files:
         path = Path(file)
@@ -135,20 +143,21 @@ def check_permissions():
         else:
             print(f"   ❌ {file} (no existe)")
             all_ok = False
-    
+
     return all_ok
+
 
 def check_ports():
     """Verifica disponibilidad del puerto"""
     print("\n🌐 Verificando disponibilidad de puertos...")
     import socket
-    
+
     port = 5000
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         result = sock.connect_ex(('localhost', port))
         sock.close()
-        
+
         if result == 0:
             print(f"   ⚠️  Puerto {port} está en uso")
             print(f"      El dashboard web podría tener problemas para iniciar")
@@ -160,16 +169,17 @@ def check_ports():
         print(f"   ⚠️  No se pudo verificar el puerto {port}")
         return False
 
+
 def print_summary(results):
     """Imprime un resumen de los resultados"""
     print_header("📋 RESUMEN DE VERIFICACIÓN")
-    
+
     total = len(results)
     passed = sum(1 for r in results.values() if r)
-    
+
     print(f"\n   Verificaciones completadas: {passed}/{total}")
     print(f"   Estado: ", end="")
-    
+
     if passed == total:
         print("✅ SISTEMA COMPLETAMENTE FUNCIONAL")
         print("\n   🚀 Todo está listo para usar Linux Challenge Lab")
@@ -184,13 +194,14 @@ def print_summary(results):
         print("❌ SISTEMA NO FUNCIONAL")
         print("\n   ❌ Varios componentes faltan o tienen errores")
         print("   💡 Ejecuta: python3 linux_challenge.py setup")
-    
+
     print("\n" + "=" * 70 + "\n")
+
 
 def main():
     """Función principal"""
     print_header("🔍 VERIFICACIÓN DEL SISTEMA - Linux Challenge Lab")
-    
+
     results = {
         'Python': check_python(),
         'Dependencias': check_dependencies(),
@@ -199,14 +210,15 @@ def main():
         'Permisos': check_permissions(),
         'Puertos': check_ports()
     }
-    
+
     print_summary(results)
-    
+
     # Código de salida
     if all(results.values()):
         sys.exit(0)
     else:
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

@@ -27,12 +27,12 @@ class LinuxChallenge:
         self.lab_dir = self.home_dir / "linux_lab"
         self.progress_file = self.lab_dir / ".progress.json"
         self.codigo_estudiante = None
-        
+
         # Cargar código de estudiante si existe
         if self.progress_file.exists():
             progress = self._cargar_progreso()
             self.codigo_estudiante = progress.get("codigo_estudiante")
-        
+
         # Definición de todos los retos del sistema
         self.retos = [
             {
@@ -184,9 +184,59 @@ class LinuxChallenge:
                 "puntos": 30,
                 "dificultad": "Experto",
                 "categoria": "Análisis de datos"
+            },
+            {
+                "id": 16,
+                "nombre": "🌱 Auditor de Entorno",
+                "descripcion": "Genera ~/linux_lab/resultados/entorno.txt con USER, SHELL y HOME usando variables reales del shell",
+                "pista": "Usa printf y las variables $USER, $SHELL y $HOME. El archivo debe tener una variable por línea.",
+                "flag": "FLAG{auditoria_entorno}",
+                "puntos": 20,
+                "dificultad": "Intermedio",
+                "categoria": "Entorno"
+            },
+            {
+                "id": 17,
+                "nombre": "💽 Inspector de Disco",
+                "descripcion": "Guarda la salida de du en ~/linux_lab/resultados/uso_disco.txt e identifica el tamaño del laboratorio",
+                "pista": "Usa 'du -sh ~/linux_lab > ~/linux_lab/resultados/uso_disco.txt'. Conserva la salida de du, no escribas un número inventado.",
+                "flag": "FLAG{inspector_disco}",
+                "puntos": 20,
+                "dificultad": "Intermedio",
+                "categoria": "Administración"
+            },
+            {
+                "id": 18,
+                "nombre": "🗄️ Backup Verificable",
+                "descripcion": "Crea ~/linux_lab/backup/lab_backup.tar.gz incluyendo logs y configuración del laboratorio",
+                "pista": "Usa tar -czf y después comprueba el contenido con tar -tzf. El backup debe contener logs/app.log y config/sistema.conf.",
+                "flag": "FLAG{backup_verificable}",
+                "puntos": 25,
+                "dificultad": "Avanzado",
+                "categoria": "Backup"
+            },
+            {
+                "id": 19,
+                "nombre": "📊 Informe con AWK",
+                "descripcion": "Calcula el total vendido por producto desde ~/linux_lab/datos/ventas.csv y guarda el informe en resultados/ventas.txt",
+                "pista": "Usa awk para sumar la columna total agrupando por producto. El informe debe incluir cafe=18 y te=11.",
+                "flag": "FLAG{informe_awk}",
+                "puntos": 25,
+                "dificultad": "Avanzado",
+                "categoria": "Procesamiento de datos"
+            },
+            {
+                "id": 20,
+                "nombre": "🌐 Diagnóstico de Resolución",
+                "descripcion": "Guarda la resolución de localhost en ~/linux_lab/resultados/localhost.txt usando una herramienta del sistema",
+                "pista": "Compara 'getent hosts localhost' con el contenido del archivo. Debe existir una resolución para localhost.",
+                "flag": "FLAG{diagnostico_red}",
+                "puntos": 25,
+                "dificultad": "Experto",
+                "categoria": "Redes"
             }
         ]
-        
+
         self.progress = self.load_progress()
 
     def setup_environment(self) -> bool:
@@ -197,65 +247,70 @@ class LinuxChallenge:
         try:
             print("🚀 Configurando el entorno de Linux Challenge Lab...")
             print("=" * 60)
-            
+
             # Solicitar código de estudiante si no existe
             if not self.codigo_estudiante:
                 self.codigo_estudiante = self.solicitar_codigo_estudiante()
                 # Guardar el código inmediatamente
                 self.progress["codigo_estudiante"] = self.codigo_estudiante
                 self.save_progress()
-                print(f"\n✅ Tu código '{self.codigo_estudiante}' ha sido guardado.")
+                print(
+                    f"\n✅ Tu código '{self.codigo_estudiante}' ha sido guardado.")
                 print("   Tus FLAGS serán únicas y personalizadas.\n")
             else:
-                print(f"\n👤 Código de estudiante registrado: {self.codigo_estudiante}")
+                print(
+                    f"\n👤 Código de estudiante registrado: {self.codigo_estudiante}")
                 print("   Tus FLAGS están personalizadas para tu código.\n")
-            
+
             # Crear directorio principal
             self.lab_dir.mkdir(exist_ok=True)
             print(f"✅ Directorio principal creado: {self.lab_dir}")
-            
+
             # Generar flags personalizadas
             flag1 = self.generar_flag_personalizada(1, "encontre_el_oculto")
             flag2 = self.generar_flag_personalizada(2, "leyendo_archivos")
             flag6 = self.generar_flag_personalizada(6, "descomprimir_experto")
             flag10 = self.generar_flag_personalizada(10, "linux_master")
-            
+
             # ===== RETO 1: Archivo oculto =====
             secretos_dir = self.lab_dir / "secretos"
             secretos_dir.mkdir(exist_ok=True)
             archivo_oculto = secretos_dir / ".archivo_oculto.txt"
-            archivo_oculto.write_text(f"{flag1}\n¡Felicidades! Has encontrado el archivo oculto.\nTu flag personalizada: {flag1}")
+            archivo_oculto.write_text(
+                f"{flag1}\n¡Felicidades! Has encontrado el archivo oculto.\nTu flag personalizada: {flag1}")
             print("✅ Reto 1: Archivo oculto creado")
-            
+
             # ===== RETO 2: Archivo de logs =====
             logs_dir = self.lab_dir / "logs"
             # ===== RETO 2: Archivo de log con flag =====
             logs_dir = self.lab_dir / "logs"
             logs_dir.mkdir(exist_ok=True)
-            
+
             sistema_log = logs_dir / "sistema.log"
             contenido_log = ("2024-01-15 10:00:00 Sistema iniciado\n"
-                           "2024-01-15 10:01:23 Usuario login: admin\n"
-                           "2024-01-15 10:02:45 Proceso completado exitosamente\n"
-                           f"2024-01-15 10:03:12 {flag2}\n"
-                           "2024-01-15 10:04:00 Sistema funcionando correctamente\n")
+                             "2024-01-15 10:01:23 Usuario login: admin\n"
+                             "2024-01-15 10:02:45 Proceso completado exitosamente\n"
+                             f"2024-01-15 10:03:12 {flag2}\n"
+                             "2024-01-15 10:04:00 Sistema funcionando correctamente\n")
             sistema_log.write_text(contenido_log)
             print("✅ Reto 2: Archivo de logs creado")
-            
+
             # Generar más flags personalizadas
             flag3 = self.generar_flag_personalizada(3, "grep_poderoso")
             flag4 = self.generar_flag_personalizada(4, "permisos_configurados")
             flag5 = self.generar_flag_personalizada(5, "estructura_creada")
-            
+
             # ===== RETO 3: Archivos con texto para grep =====
             datos_dir = self.lab_dir / "datos"
             datos_dir.mkdir(exist_ok=True)
-            
+
             (datos_dir / "archivo1.txt").write_text("Este es un archivo normal\nCon varias líneas\n")
-            (datos_dir / "archivo2.txt").write_text("Aquí hay información importante\nPero no es lo que buscas\n")
-            (datos_dir / "archivo3.txt").write_text(f"La palabra secreto está aquí\n{flag3}\n")
+            (datos_dir / "archivo2.txt").write_text(
+                "Aquí hay información importante\nPero no es lo que buscas\n")
+            (datos_dir /
+             "archivo3.txt").write_text(f"La palabra secreto está aquí\n{flag3}\n")
             print("✅ Reto 3: Archivos de datos creados")
-            
+
             # ===== RETO 4: Archivo de configuración con permisos =====
             config_dir = self.lab_dir / "config"
             config_dir.mkdir(exist_ok=True)
@@ -263,148 +318,174 @@ class LinuxChallenge:
             sistema_conf.write_text(f"# Configuración del sistema\n{flag4}\n")
             os.chmod(sistema_conf, 0o644)  # Permisos iniciales: rw-r--r--
             print("✅ Reto 4: Archivo de configuración creado con permisos 644")
-            
+
             # ===== RETO 5: Se verificará cuando el usuario cree la estructura =====
             # Guardar flag5 en un archivo de referencia
             (self.lab_dir / ".flag_reto5.txt").write_text(flag5)
             print("✅ Reto 5: Preparado para verificación de estructura")
-            
+
             # ===== RETO 6: Archivo comprimido =====
             archivos_dir = self.lab_dir / "archivos"
             archivos_dir.mkdir(exist_ok=True)
-            
+
             # Crear archivo temporal con la flag
             temp_dir = archivos_dir / "temp_secreto"
             temp_dir.mkdir(exist_ok=True)
-            (temp_dir / "flag.txt").write_text(f"{flag6}\n¡Excelente! Has descomprimido el archivo correctamente.")
-            
+            (temp_dir / "flag.txt").write_text(
+                f"{flag6}\n¡Excelente! Has descomprimido el archivo correctamente.")
+
             # Comprimir el archivo
             import tarfile
             tar_file = archivos_dir / "secreto.tar.gz"
             with tarfile.open(tar_file, "w:gz") as tar:
                 tar.add(temp_dir, arcname="secreto")
-            
+
             # Eliminar el directorio temporal
             import shutil
             shutil.rmtree(temp_dir)
             print("✅ Reto 6: Archivo comprimido creado")
-            
+
             # Generar más flags personalizadas
             flag7 = self.generar_flag_personalizada(7, "regex_master")
             flag8 = self.generar_flag_personalizada(8, "contador_experto")
             flag9 = self.generar_flag_personalizada(9, "find_increible")
-            
+
             # ===== RETO 7: Archivo con IPs =====
             conexiones_log = logs_dir / "conexiones.log"
             contenido_conexiones = ("2024-01-15 10:00:00 Conexión desde 192.168.1.100\n"
-                                   "2024-01-15 10:05:00 Conexión desde 10.0.0.50\n"
-                                   f"2024-01-15 10:10:00 {flag7}\n"
-                                   "2024-01-15 10:15:00 Conexión desde 172.16.0.1\n"
-                                   "2024-01-15 10:20:00 Conexión desde 8.8.8.8\n")
+                                    "2024-01-15 10:05:00 Conexión desde 10.0.0.50\n"
+                                    f"2024-01-15 10:10:00 {flag7}\n"
+                                    "2024-01-15 10:15:00 Conexión desde 172.16.0.1\n"
+                                    "2024-01-15 10:20:00 Conexión desde 8.8.8.8\n")
             conexiones_log.write_text(contenido_conexiones)
             print("✅ Reto 7: Archivo de conexiones creado")
-            
+
             # ===== RETO 8: Archivo con errores =====
             errores_log = logs_dir / "errores.log"
             contenido_errores = (f"INFO: Sistema iniciado\n"
-                               "ERROR: Fallo en módulo A\n"
-                               "WARNING: Advertencia general\n"
-                               "ERROR: Fallo en módulo B\n"
-                               "INFO: Proceso completado\n"
-                               "ERROR: Fallo en módulo C\n"
-                               f"{flag8}\n")
+                                 "ERROR: Fallo en módulo A\n"
+                                 "WARNING: Advertencia general\n"
+                                 "ERROR: Fallo en módulo B\n"
+                                 "INFO: Proceso completado\n"
+                                 "ERROR: Fallo en módulo C\n"
+                                 f"{flag8}\n")
             errores_log.write_text(contenido_errores)
             print("✅ Reto 8: Archivo de errores creado")
-            
+
             # ===== RETO 9: Crear archivo .txt reciente =====
-            (datos_dir / "reciente.txt").write_text(f"{flag9}\nArchivo reciente para el reto de find.")
+            (datos_dir / "reciente.txt").write_text(
+                f"{flag9}\nArchivo reciente para el reto de find.")
             # Actualizar tiempo de modificación a ahora
             os.utime(datos_dir / "reciente.txt", None)
             print("✅ Reto 9: Archivo reciente creado")
-            
+
             # ===== RETO 10: Hash MD5 =====
             # Calcular MD5 del código del estudiante + "linux_master"
             datos_hash = f"{self.codigo_estudiante}_linux_master"
             md5_hash = hashlib.md5(datos_hash.encode()).hexdigest()
             sistema_dir = self.lab_dir / "sistema" / "var" / "cache"
             sistema_dir.mkdir(parents=True, exist_ok=True)
-            
+
             hash_file = sistema_dir / md5_hash
-            hash_file.write_text(f"{flag10}\n¡FELICIDADES! Has completado el reto final.\n¡Eres un maestro de Linux!")
+            hash_file.write_text(
+                f"{flag10}\n¡FELICIDADES! Has completado el reto final.\n¡Eres un maestro de Linux!")
             print(f"✅ Reto 10: Archivo hash creado ({md5_hash})")
-            
+
             # Generar flags para retos 11-15
             flag11 = self.generar_flag_personalizada(11, "redireccion_exitosa")
             flag12 = self.generar_flag_personalizada(12, "proceso_encontrado")
             flag13 = self.generar_flag_personalizada(13, "script_maestro")
             flag14 = self.generar_flag_personalizada(14, "enlace_creado")
             flag15 = self.generar_flag_personalizada(15, "analista_experto")
-            
+            flag16 = self.generar_flag_personalizada(16, "auditoria_entorno")
+            flag17 = self.generar_flag_personalizada(17, "inspector_disco")
+            flag18 = self.generar_flag_personalizada(18, "backup_verificable")
+            flag19 = self.generar_flag_personalizada(19, "informe_awk")
+            flag20 = self.generar_flag_personalizada(20, "diagnostico_red")
+
             # ===== RETO 11: Redirecciones =====
             output_dir = self.lab_dir / "output"
             output_dir.mkdir(exist_ok=True)
-            
+
             app_log = logs_dir / "app.log"
             contenido_app = ("2024-01-15 10:00:00 SUCCESS Usuario autenticado\n"
-                           "2024-01-15 10:01:00 ERROR Fallo en conexión\n"
-                           "2024-01-15 10:02:00 SUCCESS Operación completada\n"
-                           "2024-01-15 10:03:00 WARNING Memoria baja\n"
-                           "2024-01-15 10:04:00 SUCCESS Datos guardados\n"
-                           f"{flag11}\n")
+                             "2024-01-15 10:01:00 ERROR Fallo en conexión\n"
+                             "2024-01-15 10:02:00 SUCCESS Operación completada\n"
+                             "2024-01-15 10:03:00 WARNING Memoria baja\n"
+                             "2024-01-15 10:04:00 SUCCESS Datos guardados\n"
+                             f"{flag11}\n")
             app_log.write_text(contenido_app)
             print("✅ Reto 11: Archivo de aplicación creado")
-            
+
             # ===== RETO 12: Procesos =====
             procesos_dir = self.lab_dir / "procesos"
             procesos_dir.mkdir(exist_ok=True)
-            
+
             puertos_file = procesos_dir / "puertos.txt"
             contenido_puertos = (f"Puerto 80: nginx (PID 1234)\n"
-                               "Puerto 443: nginx (PID 1234)\n"
-                               "Puerto 3000: node (PID 5678)\n"
-                               "Puerto 5432: postgres (PID 2345)\n"
-                               "Puerto 8080: java_app (PID 9876)\n"
-                               f"{flag12}\n")
+                                 "Puerto 443: nginx (PID 1234)\n"
+                                 "Puerto 3000: node (PID 5678)\n"
+                                 "Puerto 5432: postgres (PID 2345)\n"
+                                 "Puerto 8080: java_app (PID 9876)\n"
+                                 f"{flag12}\n")
             puertos_file.write_text(contenido_puertos)
             print("✅ Reto 12: Archivo de procesos creado")
-            
+
             # ===== RETO 13: Scripting =====
             scripts_dir = self.lab_dir / "scripts"
             scripts_dir.mkdir(exist_ok=True)
-            
+
             # Crear un archivo de referencia para validación
             # ===== RETO 13: Bash scripting =====
             scripts_dir = self.lab_dir / "scripts"
             scripts_dir.mkdir(exist_ok=True)
             (scripts_dir / ".flag.txt").write_text(flag13)
             print("✅ Reto 13: Directorio de scripts preparado")
-            
+
             # ===== RETO 14: Enlaces simbólicos =====
             # La flag se revelará cuando se cree el enlace correctamente
-            (self.lab_dir / ".enlace_flag.txt").write_text(f"{flag14}\n¡Excelente! Dominas los enlaces simbólicos.")
+            (self.lab_dir / ".enlace_flag.txt").write_text(
+                f"{flag14}\n¡Excelente! Dominas los enlaces simbólicos.")
             print("✅ Reto 14: Preparado para verificación de enlace")
-            
+
             # ===== RETO 15: Análisis avanzado de logs =====
             accesos_log = logs_dir / "accesos.log"
             contenido_accesos = ("2024-01-15 10:00:00 GET /api/users 192.168.1.100 200\n"
-                               "2024-01-15 10:01:00 POST /api/login 10.0.0.50 200\n"
-                               "2024-01-15 10:02:00 GET /api/data 192.168.1.100 200\n"
-                               "2024-01-15 10:03:00 GET /api/users 172.16.0.1 200\n"
-                               "2024-01-15 10:04:00 POST /api/update 192.168.1.100 201\n"
-                               "2024-01-15 10:05:00 GET /api/status 10.0.0.50 200\n"
-                               "2024-01-15 10:06:00 GET /api/users 192.168.1.100 200\n"
-                               "2024-01-15 10:07:00 POST /api/login 172.16.0.1 200\n"
-                               "2024-01-15 10:08:00 GET /api/data 10.0.0.50 200\n"
-                               "2024-01-15 10:09:00 GET /api/users 172.16.0.1 200\n"
-                               "2024-01-15 10:10:00 POST /api/create 192.168.1.100 201\n"
-                               f"{flag15}\n"
-                               "Las IPs que más aparecen son:\n"
-                               "1. 192.168.1.100 (5 veces)\n"
-                               "2. 172.16.0.1 (3 veces)\n"
-                               "3. 10.0.0.50 (3 veces)\n")
+                                 "2024-01-15 10:01:00 POST /api/login 10.0.0.50 200\n"
+                                 "2024-01-15 10:02:00 GET /api/data 192.168.1.100 200\n"
+                                 "2024-01-15 10:03:00 GET /api/users 172.16.0.1 200\n"
+                                 "2024-01-15 10:04:00 POST /api/update 192.168.1.100 201\n"
+                                 "2024-01-15 10:05:00 GET /api/status 10.0.0.50 200\n"
+                                 "2024-01-15 10:06:00 GET /api/users 192.168.1.100 200\n"
+                                 "2024-01-15 10:07:00 POST /api/login 172.16.0.1 200\n"
+                                 "2024-01-15 10:08:00 GET /api/data 10.0.0.50 200\n"
+                                 "2024-01-15 10:09:00 GET /api/users 172.16.0.1 200\n"
+                                 "2024-01-15 10:10:00 POST /api/create 192.168.1.100 201\n"
+                                 f"{flag15}\n"
+                                 "Las IPs que más aparecen son:\n"
+                                 "1. 192.168.1.100 (5 veces)\n"
+                                 "2. 172.16.0.1 (3 veces)\n"
+                                 "3. 10.0.0.50 (3 veces)\n")
             accesos_log.write_text(contenido_accesos)
             print("✅ Reto 15: Archivo de accesos creado")
-            
+
+            # ===== RETOS 16-20: Administración real del entorno =====
+            resultados_dir = self.lab_dir / "resultados"
+            resultados_dir.mkdir(exist_ok=True)
+
+            ventas_file = datos_dir / "ventas.csv"
+            ventas_file.write_text(
+                "producto,cantidad,precio,total\n"
+                "cafe,2,5,10\n"
+                "te,1,4,4\n"
+                "cafe,1,8,8\n"
+                "te,2,3.5,7\n"
+            )
+            (self.lab_dir / ".flag_retos_16_20.txt").write_text(
+                f"{flag16}\n{flag17}\n{flag18}\n{flag19}\n{flag20}\n"
+            )
+            print("✅ Retos 16-20: Material de administración creado")
+
             print("=" * 60)
             print("✅ ¡Entorno configurado exitosamente!")
             print(f"📁 Directorio del laboratorio: {self.lab_dir}")
@@ -413,9 +494,9 @@ class LinuxChallenge:
             print(f"\n🔒 Tus FLAGS son personalizadas y únicas para tu código.")
             print("\n💡 Usa 'python3 linux_challenge.py start' para ver los retos")
             print("💡 Usa 'python3 web_dashboard.py' para abrir el dashboard web")
-            
+
             return True
-            
+
         except Exception as e:
             print(f"❌ Error configurando el entorno: {e}")
             return False
@@ -428,13 +509,13 @@ class LinuxChallenge:
                     return json.load(f)
             except:
                 pass
-        
+
         return {
             "completados": [],
             "puntos": 0,
             "codigo_estudiante": None
         }
-    
+
     def _cargar_progreso(self) -> Dict:
         """Carga el progreso sin inicializar self.progress (usado en __init__)"""
         if self.progress_file.exists():
@@ -444,32 +525,32 @@ class LinuxChallenge:
             except:
                 pass
         return {"codigo_estudiante": None}
-    
+
     def generar_flag_personalizada(self, reto_id: int, texto_base: str) -> str:
         """
         Genera una flag personalizada basada en el código del estudiante.
-        
+
         Args:
             reto_id: ID del reto
             texto_base: Texto descriptivo de la flag
-            
+
         Returns:
             Flag personalizada en formato FLAG{texto_base_HASH}
         """
         if not self.codigo_estudiante:
             return f"FLAG{{{texto_base}}}"
-        
+
         # Crear un hash único combinando código de estudiante + reto_id + texto_base
         datos = f"{self.codigo_estudiante}_{reto_id}_{texto_base}"
         hash_obj = hashlib.sha256(datos.encode())
         hash_corto = hash_obj.hexdigest()[:8].upper()
-        
+
         return f"FLAG{{{texto_base}_{hash_corto}}}"
-    
+
     def solicitar_codigo_estudiante(self) -> str:
         """
         Solicita el código de estudiante al usuario.
-        
+
         Returns:
             Código de estudiante ingresado
         """
@@ -479,17 +560,18 @@ class LinuxChallenge:
         print("\n📝 Para personalizar tus retos, necesitamos tu código de estudiante.")
         print("   Este código se usará para generar FLAGS únicas para ti.")
         print("   Ejemplo: EST-2024-001, 12345678, TU-CODIGO, etc.\n")
-        
+
         while True:
             codigo = input("👤 Ingresa tu código de estudiante: ").strip()
-            
+
             if len(codigo) < 3:
-                print("❌ El código debe tener al menos 3 caracteres. Intenta de nuevo.\n")
+                print(
+                    "❌ El código debe tener al menos 3 caracteres. Intenta de nuevo.\n")
                 continue
-            
+
             print(f"\n✅ Código registrado: {codigo}")
             confirmacion = input("¿Es correcto? (s/n): ").strip().lower()
-            
+
             if confirmacion in ['s', 'si', 'yes', 'y']:
                 return codigo
             else:
@@ -504,19 +586,19 @@ class LinuxChallenge:
     def submit_flag(self, flag: str) -> Tuple[bool, str, int]:
         """
         Verifica y registra una flag enviada por el usuario.
-        
+
         Args:
             flag: La flag a verificar
-            
+
         Returns:
             Tupla (éxito, mensaje, id_reto)
         """
         flag = flag.strip()
-        
+
         # Verificar que el estudiante esté registrado
         if not self.codigo_estudiante:
             return False, "❌ Error: No hay código de estudiante registrado. Ejecuta 'setup' primero.", 0
-        
+
         # Mapeo de retos a sus textos base de flags
         flag_bases = {
             1: "encontre_el_oculto",
@@ -533,32 +615,39 @@ class LinuxChallenge:
             12: "proceso_encontrado",
             13: "script_maestro",
             14: "enlace_creado",
-            15: "analista_experto"
+            15: "analista_experto",
+            16: "auditoria_entorno",
+            17: "inspector_disco",
+            18: "backup_verificable",
+            19: "informe_awk",
+            20: "diagnostico_red"
         }
-        
+
         # Buscar qué reto corresponde a la flag
         for reto in self.retos:
-            flag_esperada = self.generar_flag_personalizada(reto["id"], flag_bases[reto["id"]])
-            
+            flag_esperada = self.generar_flag_personalizada(
+                reto["id"], flag_bases[reto["id"]])
+
             if flag_esperada == flag:
                 reto_id = reto["id"]
-                
+
                 # Verificar si ya fue completado
                 if reto_id in self.progress["completados"]:
                     return False, f"❌ Este reto ya fue completado anteriormente", reto_id
-                
+
                 # Verificación adicional según el reto
                 verificacion_exitosa = self._verificar_reto_especifico(reto_id)
-                
+
                 if not verificacion_exitosa:
                     return False, f"⚠️ Flag correcta, pero no cumples los requisitos del reto", reto_id
-                
+
                 # Registrar completado
                 self.progress["completados"].append(reto_id)
                 self.progress["puntos"] += reto["puntos"]
-                self.progress[f"reto_{reto_id}_fecha"] = datetime.now().isoformat()
+                self.progress[f"reto_{reto_id}_fecha"] = datetime.now(
+                ).isoformat()
                 self.save_progress()
-                
+
                 mensaje = (
                     "\n🎉 ¡CORRECTO! 🎉\n"
                     f"Reto {reto_id}: {reto['nombre']}\n"
@@ -567,12 +656,12 @@ class LinuxChallenge:
                     f"Completados: {len(self.progress['completados'])}/{len(self.retos)}\n"
                 )
                 return True, mensaje, reto_id
-        
+
         return False, "❌ Flag incorrecta. Intenta de nuevo.", 0
 
     def _verificar_reto_especifico(self, reto_id: int) -> bool:
         """Verificaciones adicionales específicas para cada reto"""
-        
+
         if reto_id == 1:
             return self.verificar_reto1()
         elif reto_id == 2:
@@ -603,30 +692,40 @@ class LinuxChallenge:
             return self.verificar_reto14()
         elif reto_id == 15:
             return self.verificar_reto15()
-        
+        elif reto_id == 16:
+            return self.verificar_reto16()
+        elif reto_id == 17:
+            return self.verificar_reto17()
+        elif reto_id == 18:
+            return self.verificar_reto18()
+        elif reto_id == 19:
+            return self.verificar_reto19()
+        elif reto_id == 20:
+            return self.verificar_reto20()
+
         return True
 
     def verificar_reto1(self) -> bool:
         """Verifica que el archivo oculto existe"""
         archivo = self.lab_dir / "secretos" / ".archivo_oculto.txt"
-        return archivo.exists()
+        return archivo.exists() and archivo.read_text().startswith(self.generar_flag_personalizada(1, "encontre_el_oculto"))
 
     def verificar_reto2(self) -> bool:
         """Verifica que el archivo de logs existe"""
         archivo = self.lab_dir / "logs" / "sistema.log"
-        return archivo.exists()
+        return archivo.exists() and self.generar_flag_personalizada(2, "leyendo_archivos") in archivo.read_text()
 
     def verificar_reto3(self) -> bool:
         """Verifica que los archivos de datos existen"""
         archivo = self.lab_dir / "datos" / "archivo3.txt"
-        return archivo.exists()
+        return archivo.exists() and "secreto" in archivo.read_text().lower() and self.generar_flag_personalizada(3, "grep_poderoso") in archivo.read_text()
 
     def verificar_reto4(self) -> bool:
         """Verifica que los permisos del archivo son 600"""
         archivo = self.lab_dir / "config" / "sistema.conf"
         if not archivo.exists():
             return False
-        
+
         permisos = oct(os.stat(archivo).st_mode)[-3:]
         return permisos == "600"
 
@@ -643,24 +742,24 @@ class LinuxChallenge:
     def verificar_reto7(self) -> bool:
         """Verifica que el archivo de conexiones existe"""
         archivo = self.lab_dir / "logs" / "conexiones.log"
-        return archivo.exists()
+        return archivo.exists() and len([line for line in archivo.read_text().splitlines() if "." in line]) >= 4
 
     def verificar_reto8(self) -> bool:
         """Verifica que el archivo de errores existe"""
         archivo = self.lab_dir / "logs" / "errores.log"
-        return archivo.exists()
+        return archivo.exists() and archivo.read_text().count("ERROR") == 3
 
     def verificar_reto9(self) -> bool:
         """Verifica que el archivo reciente existe"""
         archivo = self.lab_dir / "datos" / "reciente.txt"
-        return archivo.exists()
+        return archivo.exists() and (datetime.now().timestamp() - archivo.stat().st_mtime) < 86400
 
     def verificar_reto10(self) -> bool:
         """Verifica que el archivo hash existe"""
         datos_hash = f"{self.codigo_estudiante}_linux_master"
         md5_hash = hashlib.md5(datos_hash.encode()).hexdigest()
         archivo = self.lab_dir / "sistema" / "var" / "cache" / md5_hash
-        return archivo.exists()
+        return archivo.exists() and self.generar_flag_personalizada(10, "linux_master") in archivo.read_text()
 
     def verificar_reto11(self) -> bool:
         """Verifica que se creó el archivo con redirección"""
@@ -674,7 +773,7 @@ class LinuxChallenge:
     def verificar_reto12(self) -> bool:
         """Verifica que se leyó el archivo de procesos"""
         archivo = self.lab_dir / "procesos" / "puertos.txt"
-        return archivo.exists()
+        return archivo.exists() and "Puerto 8080: java_app" in archivo.read_text()
 
     def verificar_reto13(self) -> bool:
         """Verifica que se creó el script"""
@@ -695,38 +794,85 @@ class LinuxChallenge:
     def verificar_reto15(self) -> bool:
         """Verifica que el archivo de accesos existe"""
         archivo = self.lab_dir / "logs" / "accesos.log"
-        return archivo.exists()
+        if not archivo.exists():
+            return False
+        contenido = archivo.read_text()
+        return "192.168.1.100 (5 veces)" in contenido and "172.16.0.1 (3 veces)" in contenido
+
+    def verificar_reto16(self) -> bool:
+        """Verifica un informe construido con variables reales del entorno."""
+        archivo = self.lab_dir / "resultados" / "entorno.txt"
+        if not archivo.exists():
+            return False
+        contenido = archivo.read_text()
+        return all(f"{clave}=" in contenido for clave in ("USER", "SHELL", "HOME"))
+
+    def verificar_reto17(self) -> bool:
+        """Verifica que el informe de du contiene la ruta del laboratorio."""
+        archivo = self.lab_dir / "resultados" / "uso_disco.txt"
+        return archivo.exists() and str(self.lab_dir) in archivo.read_text()
+
+    def verificar_reto18(self) -> bool:
+        """Verifica un backup tar.gz legible con archivos importantes."""
+        import tarfile
+        archivo = self.lab_dir / "backup" / "lab_backup.tar.gz"
+        if not archivo.exists():
+            return False
+        try:
+            with tarfile.open(archivo, "r:gz") as backup:
+                nombres = backup.getnames()
+            return any(name.endswith("logs/app.log") for name in nombres) and any(name.endswith("config/sistema.conf") for name in nombres)
+        except (tarfile.TarError, OSError):
+            return False
+
+    def verificar_reto19(self) -> bool:
+        """Verifica los totales agrupados del informe de ventas."""
+        archivo = self.lab_dir / "resultados" / "ventas.txt"
+        if not archivo.exists():
+            return False
+        contenido = archivo.read_text().replace(" ", "")
+        return "cafe=18" in contenido and "te=11" in contenido
+
+    def verificar_reto20(self) -> bool:
+        """Verifica que localhost fue resuelto por una herramienta del sistema."""
+        archivo = self.lab_dir / "resultados" / "localhost.txt"
+        if not archivo.exists():
+            return False
+        contenido = archivo.read_text().lower()
+        return "localhost" in contenido and ("127.0.0.1" in contenido or "::1" in contenido)
 
     def mostrar_retos(self) -> None:
         """Muestra todos los retos disponibles en la CLI"""
         print("\n" + "=" * 70)
         print("🎯 LINUX CHALLENGE LAB - RETOS CTF".center(70))
         print("=" * 70)
-        
+
         completados = self.progress["completados"]
         puntos_totales = self.progress["puntos"]
         total_puntos_posibles = sum(r["puntos"] for r in self.retos)
-        
+
         if self.codigo_estudiante:
             print(f"\n👤 Estudiante: {self.codigo_estudiante}")
             print(f"🔒 Tus FLAGS son personalizadas y únicas")
-        
-        print(f"\n📊 Progreso: {len(completados)}/{len(self.retos)} retos completados")
+
+        print(
+            f"\n📊 Progreso: {len(completados)}/{len(self.retos)} retos completados")
         print(f"⭐ Puntos: {puntos_totales}/{total_puntos_posibles}")
         print(f"📈 Porcentaje: {(len(completados)/len(self.retos))*100:.0f}%")
         print("\n" + "-" * 70)
-        
+
         for reto in self.retos:
             estado = "✅" if reto["id"] in completados else "⬜"
             print(f"\n{estado} RETO {reto['id']}: {reto['nombre']}")
             print(f"   📝 {reto['descripcion']}")
-            print(f"   🏆 Puntos: {reto['puntos']} | 📊 Dificultad: {reto['dificultad']} | 📁 Categoría: {reto['categoria']}")
-            
+            print(
+                f"   🏆 Puntos: {reto['puntos']} | 📊 Dificultad: {reto['dificultad']} | 📁 Categoría: {reto['categoria']}")
+
             if reto["id"] in completados:
                 fecha = self.progress.get(f"reto_{reto['id']}_fecha", "")
                 if fecha:
                     print(f"   ✅ Completado: {fecha}")
-        
+
         print("\n" + "=" * 70)
         print("\n💡 Comandos disponibles:")
         print("   python3 linux_challenge.py hint <numero>  - Ver pista de un reto")
@@ -738,11 +884,11 @@ class LinuxChallenge:
     def mostrar_hint(self, reto_id: int) -> None:
         """Muestra la pista de un reto específico"""
         reto = next((r for r in self.retos if r["id"] == reto_id), None)
-        
+
         if not reto:
             print(f"❌ Reto {reto_id} no encontrado")
             return
-        
+
         print("\n" + "=" * 70)
         print(f"💡 PISTA - RETO {reto_id}: {reto['nombre']}")
         print("=" * 70)
@@ -754,41 +900,45 @@ class LinuxChallenge:
         completados = self.progress["completados"]
         puntos = self.progress["puntos"]
         total_puntos_posibles = sum(r["puntos"] for r in self.retos)
-        
+
         print("\n" + "=" * 70)
         print("📊 TU PROGRESO".center(70))
         print("=" * 70)
         print(f"\n✅ Retos completados: {len(completados)}/{len(self.retos)}")
         print(f"⭐ Puntos totales: {puntos}/{total_puntos_posibles}")
         print(f"📈 Porcentaje: {(len(completados)/len(self.retos))*100:.0f}%")
-        
+
         if completados:
-            print(f"\n🎯 Retos completados: {', '.join(map(str, sorted(completados)))}")
-            
+            print(
+                f"\n🎯 Retos completados: {', '.join(map(str, sorted(completados)))}")
+
             # Calcular estadísticas
-            retos_completados = [r for r in self.retos if r["id"] in completados]
+            retos_completados = [
+                r for r in self.retos if r["id"] in completados]
             if retos_completados:
                 print("\n📅 Últimas completaciones:")
                 for reto in sorted(retos_completados, key=lambda x: self.progress.get(f"reto_{x['id']}_fecha", ""), reverse=True)[:3]:
                     fecha = self.progress.get(f"reto_{reto['id']}_fecha", "")
                     if fecha:
-                        print(f"   • Reto {reto['id']}: {reto['nombre']} - {fecha}")
-        
+                        print(
+                            f"   • Reto {reto['id']}: {reto['nombre']} - {fecha}")
+
         pendientes = [r for r in self.retos if r["id"] not in completados]
         if pendientes:
             print(f"\n⏳ Retos pendientes: {len(pendientes)}")
-            print(f"   Próximo reto sugerido: Reto {pendientes[0]['id']} - {pendientes[0]['nombre']}")
+            print(
+                f"   Próximo reto sugerido: Reto {pendientes[0]['id']} - {pendientes[0]['nombre']}")
         else:
             print("\n🏆 ¡FELICIDADES! Has completado todos los retos")
             print("   Eres un verdadero maestro de Linux 🎉")
-        
+
         print("\n" + "=" * 70 + "\n")
 
 
 def main():
     """Función principal del CLI"""
     challenge = LinuxChallenge()
-    
+
     if len(sys.argv) < 2:
         mensaje_ayuda = (
             "\n🎯 Linux Challenge Lab - Sistema de Retos CTF\n\n"
@@ -804,50 +954,52 @@ def main():
         )
         print(mensaje_ayuda)
         sys.exit(1)
-    
+
     comando = sys.argv[1].lower()
-    
+
     if comando == "setup":
         challenge.setup_environment()
-    
+
     elif comando == "start":
         challenge.mostrar_retos()
-    
+
     elif comando == "submit":
         if len(sys.argv) < 3:
             print("❌ Debes proporcionar una flag")
             print("Uso: python3 linux_challenge.py submit FLAG{...}")
             sys.exit(1)
-        
+
         flag = sys.argv[2]
         exito, mensaje, reto_id = challenge.submit_flag(flag)
         print(mensaje)
-        
-        if exito and len(challenge.progress["completados"]) == 10:
+
+        if exito and len(challenge.progress["completados"]) == len(challenge.retos):
             print("\n" + "=" * 70)
             print("🏆 ¡FELICIDADES! 🏆".center(70))
             print("=" * 70)
             print("\n   Has completado todos los retos del Linux Challenge Lab")
-            print(f"   Puntuación final: {challenge.progress['puntos']}/175 puntos")
+            puntos_maximos = sum(reto["puntos"] for reto in challenge.retos)
+            print(
+                f"   Puntuación final: {challenge.progress['puntos']}/{puntos_maximos} puntos")
             print("\n   ¡Eres un verdadero maestro de Linux! 🎉\n")
             print("=" * 70 + "\n")
-    
+
     elif comando == "status":
         challenge.mostrar_status()
-    
+
     elif comando == "hint":
         if len(sys.argv) < 3:
             print("❌ Debes proporcionar el número del reto")
             print("Uso: python3 linux_challenge.py hint <numero>")
             sys.exit(1)
-        
+
         try:
             reto_id = int(sys.argv[2])
             challenge.mostrar_hint(reto_id)
         except ValueError:
             print("❌ El número de reto debe ser un entero")
             sys.exit(1)
-    
+
     else:
         print(f"❌ Comando desconocido: {comando}")
         print("Usa 'python3 linux_challenge.py' sin argumentos para ver la ayuda")
