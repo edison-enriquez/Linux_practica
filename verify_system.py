@@ -87,7 +87,8 @@ def check_environment():
     print(f"   ✅ Directorio del laboratorio: {lab_dir}")
 
     # Verificar subdirectorios
-    subdirs = ['secretos', 'logs', 'datos', 'config', 'archivos', 'sistema']
+    subdirs = ['secretos', 'logs', 'datos',
+               'config', 'archivos', 'sistema', 'cripto']
     missing = []
 
     for subdir in subdirs:
@@ -107,7 +108,7 @@ def check_environment():
                 progress = json.load(f)
             completados = len(progress.get('completados', []))
             puntos = progress.get('puntos', 0)
-            total_retos = 20
+            total_retos = 21
             print(f"\n   📊 Progreso actual:")
             print(f"      • Retos completados: {completados}/{total_retos}")
             print(f"      • Puntos registrados: {puntos}")

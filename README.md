@@ -4,11 +4,11 @@ Laboratorio interactivo para aprender administración de sistemas Linux y línea
 
 ## Contenido
 
-- 20 retos progresivos, desde navegación básica hasta diagnóstico de red.
+- 21 retos progresivos, desde navegación básica hasta criptografía de terminal.
 - Dashboard web para consultar el progreso, pedir pistas y enviar flags.
 - Interfaz CLI para trabajar completamente desde la terminal.
 - Verificaciones basadas en el estado real del sistema y en los archivos producidos.
-- 400 puntos disponibles.
+- 430 puntos disponibles.
 
 ## Inicio rápido
 
@@ -33,9 +33,9 @@ El script `./start.sh` ofrece un menú para iniciar el dashboard, consultar el e
 2. Lee un reto con `python3 linux_challenge.py start`.
 3. Trabaja en `~/linux_lab` usando comandos Linux reales.
 4. Consulta una pista con `python3 linux_challenge.py hint NUMERO` cuando sea necesario.
-5. Envía la flag con `python3 linux_challenge.py submit "FLAG{...}"` o desde el dashboard.
+5. Envía el token encontrado con `python3 linux_challenge.py submit "HASH"` o desde el dashboard.
 
-Las flags se generan a partir del código de estudiante. Una flag correcta solo registra el reto si también se cumple su condición técnica.
+Una flag correcta solo registra el reto si también se cumple su condición técnica.
 
 ## Retos
 
@@ -47,17 +47,19 @@ Las flags se generan a partir del código de estudiante. Una flag correcta solo 
 | 10 | Hash y descubrimiento de archivos | 30 |
 | 11-15 | Redirecciones, procesos, scripts, enlaces y análisis de logs | 105 |
 | 16-20 | Entorno, disco, backups, `awk` y redes | 115 |
-| **Total** | | **400** |
+| 21 | Criptografía ROT13 | 30 |
+| **Total** | | **430** |
 
 ### Retos de administración
 
-Los últimos cinco retos producen artefactos que se comprueban de forma concreta:
+Los retos de administración producen artefactos que se comprueban de forma concreta:
 
 - El informe de entorno debe contener `USER`, `SHELL` y `HOME`.
 - El informe de disco debe conservar la salida de `du -sh`.
 - El backup debe ser un `tar.gz` legible con logs y configuración.
 - El informe de ventas debe sumar los productos mediante `awk`.
 - La resolución de `localhost` debe proceder de una herramienta del sistema como `getent`.
+- El mensaje de criptografía debe descifrarse y guardarse en `cripto/mensaje_descifrado.txt`.
 
 ## Comandos útiles
 

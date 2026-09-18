@@ -36,7 +36,7 @@ fi
 
 # Verificar si el entorno está configurado
 echo -e "\n${CYAN}[3/3] Verificando entorno...${NC}"
-if [ ! -d "$HOME/linux_lab" ]; then
+if [ ! -f "$HOME/linux_lab/.progress.json" ]; then
     echo -e "${YELLOW}⚠️  El entorno no está configurado${NC}"
     echo -e "${YELLOW}Configurando entorno...${NC}"
     python3 linux_challenge.py setup

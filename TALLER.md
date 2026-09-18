@@ -5,7 +5,7 @@
 **Modalidad:** práctica individual con flags personalizadas
 **Duración estimada:** 4 a 6 horas
 **Nivel:** principiante a avanzado
-**Puntuación total:** 400 puntos
+**Puntuación total:** 430 puntos
 
 ## Objetivos de aprendizaje
 
@@ -21,6 +21,7 @@ Al completar el taller podrás:
 - Consultar procesos y datos del sistema.
 - Trabajar con enlaces simbólicos.
 - Diagnosticar información de disco y resolución de nombres.
+- Aplicar un cifrado ROT13 desde la terminal.
 
 ## Configuración inicial
 
@@ -59,7 +60,7 @@ Después visita `http://localhost:5000`.
 
 ## Cómo funciona el taller
 
-El laboratorio contiene 20 retos progresivos. Cada reto tiene una flag personalizada y una condición técnica. Encontrar o enviar una flag no es suficiente: el sistema también comprueba que se haya realizado la operación solicitada.
+El laboratorio contiene 21 retos progresivos. Cada reto tiene un token hexadecimal personalizado y una condición técnica. Encontrar o enviar un token no es suficiente: el sistema también comprueba que se haya realizado la operación solicitada.
 
 Para consultar una pista:
 
@@ -67,10 +68,10 @@ Para consultar una pista:
 python3 linux_challenge.py hint <numero>
 ```
 
-Para enviar una flag:
+Para enviar un token encontrado:
 
 ```bash
-python3 linux_challenge.py submit "FLAG{tu_flag_aqui}"
+python3 linux_challenge.py submit "HASH_HEXADECIMAL"
 ```
 
 Para consultar el estado:
@@ -89,7 +90,8 @@ python3 linux_challenge.py status
 | Experto | 1 | 30 |
 | Especializado | 5 | 105 |
 | Administración | 5 | 115 |
-| **Total** | **20** | **400** |
+| Criptografía | 1 | 30 |
+| **Total** | **21** | **430** |
 
 ## Retos 1 a 5: fundamentos
 
@@ -99,11 +101,6 @@ python3 linux_challenge.py status
 
 **Conceptos:** `cd`, `ls`, archivos ocultos y lectura de archivos.
 
-```bash
-cd ~/linux_lab/secretos
-ls -la
-cat .archivo_oculto.txt
-```
 
 ### Reto 2: Lector de logs
 
@@ -117,9 +114,6 @@ cat .archivo_oculto.txt
 
 **Conceptos:** búsqueda recursiva y patrones de texto.
 
-```bash
-grep -r "secreto" ~/linux_lab/datos
-```
 
 ### Reto 4: Maestro de permisos
 
@@ -127,10 +121,6 @@ grep -r "secreto" ~/linux_lab/datos
 
 **Conceptos:** permisos numéricos, `chmod` y `ls -l`.
 
-```bash
-chmod 600 ~/linux_lab/config/sistema.conf
-ls -l ~/linux_lab/config/sistema.conf
-```
 
 ### Reto 5: Constructor de estructuras
 
@@ -138,9 +128,6 @@ ls -l ~/linux_lab/config/sistema.conf
 
 **Conceptos:** directorios anidados y `mkdir -p`.
 
-```bash
-mkdir -p ~/linux_lab/proyecto/src/main/java/com/app
-```
 
 ## Retos 6 a 10: búsqueda y análisis
 
@@ -148,44 +135,26 @@ mkdir -p ~/linux_lab/proyecto/src/main/java/com/app
 
 **Objetivo:** extrae `~/linux_lab/archivos/secreto.tar.gz` y encuentra la flag.
 
-```bash
-cd ~/linux_lab/archivos
-tar -xzf secreto.tar.gz
-find secreto -type f -print
-```
 
 ### Reto 7: Filtro de patrones
 
 **Objetivo:** encuentra todas las direcciones IP en `logs/conexiones.log`.
 
-```bash
-grep -E '[0-9]{1,3}(\.[0-9]{1,3}){3}' ~/linux_lab/logs/conexiones.log
-```
 
 ### Reto 8: Contador de líneas
 
-**Objetivo:** cuenta las líneas que contienen `ERROR` en `logs/errores.log`.
+**Objetivo:** cuenta las líneas que contienen `ERROR`, guarda el resultado y encuentra el token en `logs/errores.log`.
 
-```bash
-grep 'ERROR' ~/linux_lab/logs/errores.log | wc -l
-```
 
 ### Reto 9: Detective de archivos
 
 **Objetivo:** encuentra los archivos `.txt` modificados durante las últimas 24 horas.
 
-```bash
-find ~/linux_lab -type f -name '*.txt' -mtime -1 -print
-```
 
 ### Reto 10: El hash perdido
 
 **Objetivo:** calcula el MD5 de `<codigo>_linux_master` y localiza el archivo con ese nombre en `sistema/var/cache`.
 
-```bash
-echo -n "TU_CODIGO_linux_master" | md5sum
-find ~/linux_lab/sistema/var/cache -type f
-```
 
 ## Retos 11 a 15: operaciones del sistema
 
@@ -193,18 +162,11 @@ find ~/linux_lab/sistema/var/cache -type f
 
 **Objetivo:** crea `output/resultado.txt` con únicamente las líneas `SUCCESS` de `logs/app.log`.
 
-```bash
-mkdir -p ~/linux_lab/output
-grep 'SUCCESS' ~/linux_lab/logs/app.log > ~/linux_lab/output/resultado.txt
-```
 
 ### Reto 12: Cazador de procesos
 
 **Objetivo:** identifica el servicio asociado al puerto 8080 en `procesos/puertos.txt`.
 
-```bash
-grep '8080' ~/linux_lab/procesos/puertos.txt
-```
 
 ### Reto 13: Escritor de scripts
 
@@ -212,27 +174,16 @@ grep '8080' ~/linux_lab/procesos/puertos.txt
 
 El script debe comenzar con `#!/bin/bash` y tener permiso de ejecución.
 
-```bash
-chmod +x ~/linux_lab/scripts/contador.sh
-~/linux_lab/scripts/contador.sh
-```
 
 ### Reto 14: Creador de enlaces
 
 **Objetivo:** crea `~/linux_lab/acceso_rapido` como enlace simbólico hacia `~/linux_lab/datos`.
 
-```bash
-ln -s ~/linux_lab/datos ~/linux_lab/acceso_rapido
-readlink ~/linux_lab/acceso_rapido
-```
 
 ### Reto 15: Análisis de logs
 
 **Objetivo:** encuentra las tres IP que más aparecen en `logs/accesos.log`.
 
-```bash
-awk '{print $4}' ~/linux_lab/logs/accesos.log | sort | uniq -c | sort -rn | head -3
-```
 
 ## Retos 16 a 20: administración
 
@@ -242,45 +193,31 @@ Estos retos generan resultados verificables en `~/linux_lab/resultados`.
 
 Crea `resultados/entorno.txt` con los valores reales de `USER`, `SHELL` y `HOME`, una variable por línea.
 
-```bash
-printf 'USER=%s\nSHELL=%s\nHOME=%s\n' "$USER" "$SHELL" "$HOME" > ~/linux_lab/resultados/entorno.txt
-```
 
 ### Reto 17: Inspector de disco
 
 Guarda la salida real de `du` en `resultados/uso_disco.txt`.
 
-```bash
-du -sh ~/linux_lab > ~/linux_lab/resultados/uso_disco.txt
-```
 
 ### Reto 18: Backup verificable
 
 Crea `backup/lab_backup.tar.gz` con los logs y la configuración del laboratorio.
 
-```bash
-mkdir -p ~/linux_lab/backup
-tar -czf ~/linux_lab/backup/lab_backup.tar.gz \
-  -C ~/linux_lab logs config
-tar -tzf ~/linux_lab/backup/lab_backup.tar.gz
-```
 
 ### Reto 19: Informe con AWK
 
-Agrupa las ventas de `datos/ventas.csv` por producto y guarda los totales en `resultados/ventas.txt`. Los totales esperados son `cafe=18` y `te=11`.
+Encuentra el token en los metadatos de `datos/ventas.csv`, agrupa las ventas por producto y guarda los totales en `resultados/ventas.txt`. Los totales esperados son `cafe=18` y `te=11`.
 
-```bash
-awk -F, 'NR > 1 { total[$1] += $4 } END { for (producto in total) print producto "=" total[producto] }' \
-  ~/linux_lab/datos/ventas.csv > ~/linux_lab/resultados/ventas.txt
-```
 
 ### Reto 20: Diagnóstico de resolución
 
 Guarda la resolución del nombre `localhost` en `resultados/localhost.txt`.
 
-```bash
-getent hosts localhost > ~/linux_lab/resultados/localhost.txt
-```
+
+### Reto 21: Criptógrafo de terminal
+
+Descifra el archivo ROT13 `~/linux_lab/cripto/mensaje_rot13.txt` y guarda el resultado en `~/linux_lab/cripto/mensaje_descifrado.txt`. El token se encuentra dentro del mensaje descifrado.
+
 
 ## Comandos de referencia
 
@@ -343,14 +280,14 @@ python3 linux_challenge.py start
 python3 verify_system.py
 ```
 
-El dashboard web muestra el avance, los puntos, las pistas y el estado de los 20 retos.
+El dashboard web muestra el avance, los puntos, las pistas y el estado de los 21 retos.
 
 ## Preguntas frecuentes
 
 **¿Puedo resolver los retos en cualquier orden?**
 Sí, aunque se recomienda seguir el orden de dificultad.
 
-**¿Qué ocurre si envío una flag incorrecta?**
+**¿Qué ocurre si envío un token incorrecto?**
 El sistema permite volver a intentarlo sin penalización.
 
 **¿Puedo consultar documentación externa?**
@@ -396,7 +333,7 @@ Usa `Ctrl+C` para cancelar el comando actual, `Ctrl+D` para cerrar una sesión y
 ## Lista de verificación final
 
 - [ ] Configuré mi código de estudiante.
-- [ ] Resolví al menos 15 de 20 retos.
+- [ ] Resolví al menos 16 de 21 retos.
 - [ ] Alcancé al menos 150 puntos.
 - [ ] Verifiqué mi progreso con `status`.
 - [ ] Envié las flags encontradas.

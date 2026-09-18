@@ -23,8 +23,10 @@
       }
     }
   },
-  "postCreateCommand": "pip install -r requirements.txt && chmod +x start.sh && chmod +x verify_system.py && python3 linux_challenge.py setup",
-  "forwardPorts": [5000],
+  "postCreateCommand": "pip install -r requirements.txt && chmod +x start.sh && chmod +x verify_system.py",
+  "forwardPorts": [
+    5000
+  ],
   "portsAttributes": {
     "5000": {
       "label": "Linux Challenge Dashboard",
