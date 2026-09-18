@@ -1,6 +1,9 @@
 {
   "name": "Linux Challenge Lab - CTF Style",
   "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "containerEnv": {
+    "KEY_TO_CRIPTO": "UAO2026"
+  },
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": true,
